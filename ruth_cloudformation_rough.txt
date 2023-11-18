@@ -1,0 +1,33 @@
+AIMS
+
+Create a basic web server architecture which can be extended in to a production level.
+Extend the base template by adding more features or elements to it so that it can be used in a production environment
+Add up security of the system that is essential for a production envirnment
+Put the templte into version control tool so that it can be shared across team
+Prepare the environment so that the the clouf formation file can be executed automatically.
+
+Methods
+
+1.  A very basic Cloudformation template has been created that consist of the bare minimum requirements needed for the architecture - web server, database server and a storage server.
+Configure EC2 instance and installa Web server, Database server and S3 Bucket for storage
+Identifey the secutiy group and policies with respecto the behavious of each insatnce.
+Create a Git reporstiry and push the YAML file along with documentation to it.
+Create a shell script and organizae the aws clie command with in it for dynamic execution.
+
+
+Result
+
+1.  The intially created base YAML file exeucted from a command line interface and as result very basic web server architecture has been created in the AWS Cloud.
+
+Conclusion
+
+what is aws cloud fromation
+How it helps in managing infrascture
+how it can be used in a production environment
+how it can extend further
+
+
+
+
+
+

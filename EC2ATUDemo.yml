@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: A Template to create a webserver architecture that can host web application
+
+Resources:
+  WebServerInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: ami-0fe8bec493a81c7da
+      Tags:
+        - Value: ApacheServer
+          Key: Name
+        
+  DatabaseServerInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      InstanceType: t3.micro
+      ImageId: ami-0fe8bec493a81c7da
+      Tags:
+        - Value: DatabaseServer
+          Key: Name
+
+  S3BucketInstance:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: web-assets-lab2
