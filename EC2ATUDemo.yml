@@ -1,26 +1,84 @@
 AWSTemplateFormatVersion: "2010-09-09"
-Description: A Template to create a webserver architecture that can host web application
+Description: A Template to create a webserver architecture that can host a web application
 
 Resources:
+
+  WebServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Security group for the Web Server'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0          
+
+  DBServerSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: 'Security group for the DB Server'
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 3306
+          ToPort: 3306
+          CidrIp: 0.0.0.0/0           
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0   
+
   WebServerInstance:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t3.micro
+      SecurityGroupIds:
+        - !GetAtt WebServerSecurityGroup.GroupId
       ImageId: ami-0fe8bec493a81c7da
       Tags:
-        - Value: ApacheServer
-          Key: Name
-        
+        - Key: Name
+          Value: ApacheServer
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash -xe
+          sudo apt update && sudo apt -y upgrade
+          sudo apt install -y apache2
+          sudo systemctl start apache2
+          sudo systemctl enable apache2
+          sudo chown -R ubuntu:ubuntu /var/www
+          sudo echo "Hello Apache Speaking !!" > /var/www/html/index.html
+          sudo ufw allow 80/tcp
+
   DatabaseServerInstance:
     Type: AWS::EC2::Instance
     Properties:
       InstanceType: t3.micro
+      SecurityGroupIds:
+        - !GetAtt DBServerSecurityGroup.GroupId
       ImageId: ami-0fe8bec493a81c7da
       Tags:
-        - Value: DatabaseServer
-          Key: Name
+        - Key: Name
+          Value: DatabaseServer
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash -xe
+          sudo apt-get update -y
+          sudo apt-get upgrade -y
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server
+          sudo systemctl start mysql
+          sudo mysql -e "ALTER USER 'root'localhost'*' IDENTIFIED WITH 'mysql_native_password' BY 'l00179208';"
+          sudo mysql -e "FLUSH PRIVILEGES;"
+
 
   S3BucketInstance:
     Type: AWS::S3::Bucket
     Properties:
       BucketName: web-assets-lab2
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: false
+      OwnershipControls:
+        Rules:
+          - ObjectOwnership: ObjectWriter

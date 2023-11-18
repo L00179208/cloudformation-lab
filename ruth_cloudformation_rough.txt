@@ -9,15 +9,16 @@ Prepare the environment so that the the clouf formation file can be executed aut
 Methods
 
 1.  A very basic Cloudformation template has been created that consist of the bare minimum requirements needed for the architecture - web server, database server and a storage server.
-Configure EC2 instance and installa Web server, Database server and S3 Bucket for storage
-Identifey the secutiy group and policies with respecto the behavious of each insatnce.
-Create a Git reporstiry and push the YAML file along with documentation to it.
-Create a shell script and organizae the aws clie command with in it for dynamic execution.
+2.  Configure EC2 instance and installa Web server, Database server and S3 Bucket for storage.
+3.  The webserver set to run on port 80 and hence it needs to be accessed publically hence an inbout rule set which allow publi access of the instance.  A security group has been set for this inside the cloufdromation script.  The database server also needs to be acesed by the Web server and the database servers needs internet access sometimes for updates and hence port no 3306 has bee opened here and ssh port is also opened for all users in another security group so that this can be modified later without affecting the web server.
+4. A git repository was already created before writing th script and each updates were pushed in to this repo.  So an easy rollback point was already there in case of any failure.  A stable version is also tagged for better recovery.  
+5. A Shell script has been created to invode the aws cloudformation command so that it can be called from a command line interface 
 
 
 Result
 
 1.  The intially created base YAML file exeucted from a command line interface and as result very basic web server architecture has been created in the AWS Cloud.
+2. 
 
 Conclusion
 
@@ -27,7 +28,12 @@ how it can be used in a production environment
 how it can extend further
 
 
+Soon after the installation of instances they were not accessible from the command line. An inbound rule needed to br provided so that the instance can be accessed from a remote machine via SSH.  
 
+https://docs.aws.amazon.com/quicksight/latest/user/vpc-security-groups.html
 
-
-
+https://blog.devgenius.io/deploying-an-ec2-instance-in-aws-and-installing-apache-81d3c3670b9
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-instance.html
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-securitygroupingress.html
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-properties-s3-bucket-publicaccessblockconfiguration.html
+https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-securitygroupingress.html
